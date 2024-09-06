@@ -6,5 +6,9 @@ class CreateFavorites < ActiveRecord::Migration[7.1]
 
       t.timestamps
     end
+    add_foreign_key :favorites, :users, column: :user_id
+    add_index :favorites, :user_id
+    add_foreign_key :favorites, :foods, column: :food_id
+    add_index :favorites, :food_id
   end
 end

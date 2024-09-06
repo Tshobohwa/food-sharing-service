@@ -19,6 +19,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_06_134219) do
     t.integer "food_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["food_id"], name: "index_claims_on_food_id"
+    t.index ["user_id"], name: "index_claims_on_user_id"
   end
 
   create_table "favorites", force: :cascade do |t|
@@ -26,22 +28,35 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_06_134219) do
     t.integer "food_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["food_id"], name: "index_favorites_on_food_id"
+    t.index ["user_id"], name: "index_favorites_on_user_id"
   end
 
   create_table "foods", force: :cascade do |t|
     t.string "name"
     t.text "description"
     t.integer "quantity"
+    t.integer "created_by"
+    t.integer "given_to"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_foods_on_created_by"
+    t.index ["given_to"], name: "index_foods_on_given_to"
   end
 
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
     t.string "role"
+    t.string "password"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "claims", "foods"
+  add_foreign_key "claims", "users"
+  add_foreign_key "favorites", "foods"
+  add_foreign_key "favorites", "users"
+  add_foreign_key "foods", "users", column: "created_by"
+  add_foreign_key "foods", "users", column: "given_to"
 end

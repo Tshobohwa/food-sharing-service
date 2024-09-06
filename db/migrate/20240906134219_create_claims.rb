@@ -6,5 +6,9 @@ class CreateClaims < ActiveRecord::Migration[7.1]
 
       t.timestamps
     end
+    add_foreign_key :claims, :users, column: :user_id
+    add_index :claims, :user_id
+    add_foreign_key :claims, :foods, column: :food_id
+    add_index :claims, :food_id
   end
 end
