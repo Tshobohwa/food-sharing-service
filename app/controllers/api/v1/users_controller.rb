@@ -17,6 +17,15 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  def login
+    @user = User.find_by({email: user_params[:email], password: user_params[:password]})
+    if @user != nil
+      render json: { status: "success", data: {user: @user}}
+    else
+      render json: {status: "fail", error: {mesage: "Invalid email or password"}}, status: 404
+    end
+  end
+
   private
 
   def user_role
