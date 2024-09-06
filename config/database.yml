@@ -22,6 +22,8 @@ default: &default
 development:
   <<: *default
   database: food_sharing_service_development
+  username: postgres
+  password: 243243
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -56,6 +58,8 @@ development:
 test:
   <<: *default
   database: food_sharing_service_test
+  username: postgres
+  password: 243243
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -81,4 +85,6 @@ production:
   <<: *default
   database: food_sharing_service_production
   username: food_sharing_service
-  password: <%= ENV["FOOD_SHARING_SERVICE_DATABASE_PASSWORD"] %>
+  password: <%= ENV["BEVMARKET_BACKEND_DATABASE_PASSWORD"] %>
+  port: <%= ENV["DATABASE_PORT"] %>
+  url: <%= ENV["BEVMARKET_DATABASE_URL"] %>
