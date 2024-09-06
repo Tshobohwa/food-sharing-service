@@ -3,8 +3,8 @@ const foodController = require("../controllers/FoodController");
 
 const router = express.Router();
 
-router.route("/").get(foodController).post(foodController.postUser);
+router.route("/").get(foodController.getFoods).post(foodController.postFood);
 
-router.route("/[:id]").patch(userController.updateUser);
+router.route("/[:id]").patch(foodController.updateFood);
 
 module.exports = router;
