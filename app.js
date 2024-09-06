@@ -1,10 +1,8 @@
 const express = require("express");
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
-// const itemRoutes = require("./routes/itemRoutes");
-// const clientRoutes = require("./routes/clientRoutes");
-// const expenseRoutes = require("./routes/expenseRoutes");
-// const stockItemRoutes = require("./routes/stockItemsRoutes");
+const userRoutes = require("./routes/userRoutes");
+const foodRoutes = require("./routes/foodRoutes");
 
 const app = express();
 
@@ -16,8 +14,8 @@ app.use((req, _, next) => {
   next();
 });
 
-app.use("/api/v1/items", itemRoutes);
-app.use("/api/v1/clients", clientRoutes);
+app.use("/api/v1/foods", foodRoutes);
+app.use("/api/v1/users", userRoutes);
 
 app.all("*", (req, _, next) => {
   const err = new AppError(`route ${req.originalUrl} not found`, 404);
