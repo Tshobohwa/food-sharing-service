@@ -13,8 +13,10 @@ class Api::V1::UsersController < ApplicationController
     if @user.save
       render json: {status: 'success', data: {user: @user}}, status: :created
     else
-      render json: {status: 'fail', error: {message: "Couldn't create user"}}, status: :fail
+      render json: {status: 'fail', error: {message: "Couldn't create user"}}, status: :unprocessable_entity
     end
+  rescue ActiveRecord::RecordNotUnique
+    render json: {status: "fail", error: {message: "A user with this email already exists."}}, status: :unprocessable_entity
   end
 
   def login
@@ -22,7 +24,7 @@ class Api::V1::UsersController < ApplicationController
     if @user != nil
       render json: { status: "success", data: {user: @user}}
     else
-      render json: {status: "fail", error: {mesage: "Invalid email or password"}}, status: 404
+      render json: {status: "fail", error: {mesage: "Invalid email or password"}}, status: :not_found
     end
   end
 
