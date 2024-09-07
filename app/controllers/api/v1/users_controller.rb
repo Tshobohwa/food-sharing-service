@@ -1,11 +1,12 @@
 class Api::V1::UsersController < ApplicationController
+  before_action :find_user, only: [:update]
   def index
     if user_role == "all"
-      @user = User.all
+      @users = User.all
     else
-      @user = User.where(role: user_role)
+      @users = User.where(role: user_role)
     end
-    render json: {status: 'success', data: {user: @user}}
+    render json: {status: 'success', data: {users: @users}}
   end
 
   def create
@@ -17,6 +18,11 @@ class Api::V1::UsersController < ApplicationController
     end
   rescue ActiveRecord::RecordNotUnique
     render json: {status: "fail", error: {message: "A user with this email already exists."}}, status: :unprocessable_entity
+  end
+
+  def update
+    @user.update(user_params)
+    render json: {status: "success", data: {user: @user }}
   end
 
   def login
@@ -35,6 +41,10 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:name, :password, :role, :email)
+    params.require(:user).permit(:name, :password, :role, :email, :address, :phone_number)
+  end
+
+  def find_user
+    @user = User.find(params[:id])
   end
 end
