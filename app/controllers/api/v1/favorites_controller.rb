@@ -1,7 +1,13 @@
 class Api::V1::FavoritesController < ApplicationController
   before_action :find_favorite, only: [:destroy]
   def index
-    @favorites = Favorite.where({user_id: user_id, food_id: food_id})
+    if params[:user_id] != nil
+      @favorites = Favorite.includes(:user, :food).where(user_id: params[:user_id])
+    elsif params[:food_id] != nil
+      @favorites = Favorite.includes(:user, :food).where(food_id: params[:food_id])
+    else
+      @favorites = Favorite.all
+    end
 
     render json: {status:"success", data: {favorites: @favorites}}
   end

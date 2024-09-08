@@ -2,15 +2,25 @@ class Api::V1::ClaimsController < ApplicationController
   before_action :find_claim, only: [:destroy]
   def index
     if params[:user_id] != nil
-      @claims = Claim.where(user_id: params[:user_id])
+      @claims = Claim.includes(:user, :food).where(user_id: params[:user_id])
     elsif params[:food_id] != nil
-      @claims =Claim.where(food_id: params[:food_id])
+      @claims = Claim.includes(:user, :food).where(food_id: params[:food_id])
     else
       @claims = Claim.all
     end
 
-    render json: {status: "success", data: {claims: @claims}}
+    render json: {status: "success", data: {claims: @claims.as_json(includes: [:user, :food])}}
   end
+
+  def create
+    @claim = Claim.new(claim_params)
+    if @claim.save
+      render json: {status: "success", data: {claim: @claim}}, status: :created
+    else
+      render json: {status: "fail", error: {message: "Couldn't add claim"}}, status: :unprocessable_entity
+    end
+  end
+
 
   def destroy
     @claim.destroy
