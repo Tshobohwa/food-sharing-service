@@ -19,6 +19,8 @@ class Api::V1::FavoritesController < ApplicationController
     else
       render json: {status: "fail", error: {message: "Couldn't add favorite"}}, status: :unprocessable_entity
     end
+  rescue ActiveRecord::RecordNotUnique
+    render json: {status: "fail", error: "Favorite already exists"}, status: :unprocessable_entity
   end
 
   def destroy

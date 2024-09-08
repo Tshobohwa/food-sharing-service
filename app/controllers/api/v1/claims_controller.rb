@@ -19,6 +19,8 @@ class Api::V1::ClaimsController < ApplicationController
     else
       render json: {status: "fail", error: {message: "Couldn't add claim"}}, status: :unprocessable_entity
     end
+  rescue ActiveRecord::RecordNotUnique
+    render json: {status: "fail", error: "Claim already exists"}, status: :unprocessable_entity
   end
 
 
