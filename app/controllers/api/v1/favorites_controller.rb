@@ -13,6 +13,9 @@ class Api::V1::FavoritesController < ApplicationController
   end
 
   def create
+    food = Food.find(favorite_params[:food_id])
+    render json: {status: "fail", error: {message: "Food already given"}}, status: :unprocessable_entity if food[:givent_to] != nil
+
     @favorite = Favorite.new(favorite_params)
     if @favorite.save
       render json: {status: "success", data: {favorite: @favorite}}, status: :created

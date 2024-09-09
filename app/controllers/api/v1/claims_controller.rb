@@ -13,6 +13,9 @@ class Api::V1::ClaimsController < ApplicationController
   end
 
   def create
+    food = Food.find(claim_params[:food_id])
+    render json: {status:"fail", error: {message: "Food already given"}}, status: :unprocessable_entity if food[:given_to] != nil
+
     @claim = Claim.new(claim_params)
     if @claim.save
       render json: {status: "success", data: {claim: @claim}}, status: :created
