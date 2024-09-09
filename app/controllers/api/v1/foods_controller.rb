@@ -1,5 +1,5 @@
 class Api::V1::FoodsController < ApplicationController
-  before_action :find_food, only: [:destroy]
+  before_action :find_food, only: [:destroy, :update]
   def index
     if params[:status] == "available"
       @foods = Food.where(given_to: nil)
@@ -46,7 +46,7 @@ class Api::V1::FoodsController < ApplicationController
   private
 
   def food_params
-    params.require(:food).permit(:name, :created_by, :description, :quantity)
+    params.require(:food).permit(:name, :created_by, :description, :quantity, :given_to)
   end
 
   def find_food
