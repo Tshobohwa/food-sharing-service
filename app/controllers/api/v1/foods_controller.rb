@@ -5,6 +5,8 @@ class Api::V1::FoodsController < ApplicationController
       @foods = Food.where(given_to: nil)
     elsif params[:shared_by] != nil
       @foods = Food.where(created_by: +params[:shared_by])
+    elsif params[:receiver_id] != nil
+      @foods = Food.where(given_to: params[:receiver_id])
     else
       @foods = Food.all
     end
@@ -18,6 +20,23 @@ class Api::V1::FoodsController < ApplicationController
     else
       render json: {status: 'fail', error: {message: "Couldn't create user"}}, status: :unprocessable_entity
     end
+  end
+
+  def update
+    favorites = Favorite.where(food_id: @food.id)
+    claims = Claim.where(food_id: @food.id)
+
+    claims.each do |claim|
+      claim.destroy
+    end
+
+    favorites.each do |favorite|
+      favorite.destroy
+    end
+
+    @food.update(food_params)
+
+    render json: {status: "success", data: {food: @food}}
   end
 
   def destroy
